@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery POST Request</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+<script>
+    $(document).ready(function() {
+        // Data to be sent in the request
+        var requestData = {
+            action: 'create_account',
+            username: 'bitress',
+            password: '@bitress123',
+            email: 'byteress@gmail.com'
+        };
+
+        // Perform a POST request
+        $.ajax({
+            url: 'index.php',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function(response) {
+                console.log('Success:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
