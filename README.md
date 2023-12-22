@@ -1,4 +1,11 @@
 
+# To-Do List using PHP and ReactJs
+
+Effortlessly manage tasks with our ReactJS + PHP To-Do List. Real-time updates, data persistence, and easy integration for a seamless task management experience.
+
+
+
+
 
 ## Installation
 
@@ -38,3 +45,31 @@ npm install
 
 
 
+
+## Usage/Examples
+
+
+Run the To-Do List Backend
+
+```bash 
+# Replace with your preferred web server command
+php -S localhost:8000
+```
+
+Run the To-Do List Frontend
+
+```bash
+cd todo-list
+npm run dev
+```
+
+## Additional Notes
+- Ensure that Composer and npm are installed on your system before proceeding.
+- Make sure to handle any prompts during the key generation process.
+- Customize the file path for saving the private key according to your preferences.
+
+
+
+
+# Authors
+- [@bitress](https://www.github.com/bitress)
