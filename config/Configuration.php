@@ -8,7 +8,7 @@ const DB_HOST = "localhost";
 const DB_NAME = "todo-list";
 const DB_USER = "root";
 const DB_PASS = "";
-const PEM_FILE = 'owo.pem';
+const PEM_FILE = 'private_key.pem';
 
 $passphrase = $_SERVER['JWT_PASSPHRASE'];
 
