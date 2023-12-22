@@ -64,11 +64,15 @@ class JwtUtils
 
     public function generateJwtToken(array $user): string
     {
+
+        $expirationTime = time() + 3600; // 1 hour
+
         $token = [
             "iss" => JWT_CONFIG['ISS'],
             "aud" => JWT_CONFIG['AUD'],
             "iat" => JWT_CONFIG['IAT'],
             "nbf" => JWT_CONFIG['NBF'],
+            "exp" => $expirationTime,
             "data" => [
                 "id" => $user['user_id'],
                 "username" => $user['username'],
