@@ -123,11 +123,17 @@ use Firebase\JWT\JWT;
                     http_response_code(200);
                     echo json_encode(["success" => true, "message" => "Successful login.", "jwt" => $jwt]);
                     return true;
+                } else {
+                    echo json_encode(["success" => false, "message" => "Incorrect password."]);
+                    return false;
                 }
+            } else {
+                echo json_encode(["success" => false, "message" => "User can't be found."]);
+                return false;
             }
 
             // Return failure response
-            http_response_code(401);
+            http_response_code(200);
             echo json_encode(["success" => false, "message" => "Login failed."]);
             return false;
         } catch (Exception $exception) {

@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import axios from "axios";
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+import { setCookie } from "../utils/cookie.js";
+import { useNavigate } from "react-router-dom";
 
-function LoginPage() {
+function LoginPage({ setLoggedIn }) {
 
+    const notyf = new Notyf();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
@@ -14,32 +19,39 @@ function LoginPage() {
         setPassword(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = JSON.stringify({
-            "action": "login",
-            "username": username,
-            "password": password
-        });
-
-        const config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'http://localhost/todo-list/',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: data
+        const data = {
+            action: 'login',
+            username: username,
+            password: password
         };
 
-        axios.request(config)
-            .then((response) => {
-                console.log(JSON.stringify(response.data));
-            })
-            .catch((error) => {
-                console.log(error);
+        try {
+            const response = await fetch('http://localhost/php-api/api.php', {
+                method: 'POST',
+                body: JSON.stringify(data)
             });
+
+            const responseData = await response.json();
+
+            if (responseData.success) {
+                setCookie('jwt', responseData.jwt, 1);
+                notyf.success(responseData.message);
+
+                setTimeout(function (){
+                    setLoggedIn(true);
+                    navigate('/');
+                },3000)
+
+            } else {
+                notyf.error(responseData.message);
+            }
+        } catch (error) {
+            console.error('Fetch request failed:', error);
+        }
     };
+
 
 
     return (
