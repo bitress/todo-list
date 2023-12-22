@@ -7,15 +7,14 @@ header("Content-Type: application/json; charset=UTF-8");
 
 include_once 'init.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    $action = $_POST['action'];
 
-    switch ($action) {
+$data = json_decode(file_get_contents("php://input"));
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($data->action)) {
+
+    switch ($data->action) {
         case 'create_account':
             $auth = new Authentication();
-
-            $data = json_decode(file_get_contents("php://input"));
-            error_log('Received data for create_account: ' . json_encode($data));
 
             // Check if the required properties exist in the JSON data
             if (isset($data->username, $data->email, $data->password)) {
@@ -26,9 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 if ($auth->userRegister()) {
                     http_response_code(200);
                     echo json_encode(["success" => true, 'message' => 'Account created successfully']);
-                } else {
-                    http_response_code(500); // Adjust the status code based on your error handling
-                    echo json_encode(["success" => false, 'message' => 'Failed to create account']);
                 }
             } else {
                 http_response_code(400); // Bad Request

@@ -21,7 +21,7 @@ class Authentication
     }
 
 
-    public function userRegister()
+    public function userRegister(): bool
     {
 
         try {
@@ -29,6 +29,12 @@ class Authentication
             if (  empty($this->username) ||
                 empty($this->email) ||
                 empty($this->password)) {
+                return false;
+            }
+
+            if ($this->isEmailExists()){
+                http_response_code(500);
+                echo json_encode(array("success" => false, "message" => "Email is already taken." ));
                 return false;
             }
 
@@ -55,10 +61,24 @@ class Authentication
             return false;
 
         } catch (Exception $exception){
+            http_response_code(500);
             echo json_encode(array("success" => false, "message" => "Error: " . $exception->getMessage()));
         }
 
         return false;
+    }
+
+
+    private function isEmailExists()
+    {
+        $sql = "SELECT email FROM " . $this->table_name . " WHERE email = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(":email", $this->email);
+        if ($stmt->execute()){
+            if ($stmt->rowCount() > 0){
+                return true;
+            }
+        }
     }
 
 }
