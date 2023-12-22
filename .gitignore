@@ -1,2 +1,7 @@
+# .gitignore
+
+# Ignore .env file
 .env
+
+# Ignore owo.pem file
 owo.pem
