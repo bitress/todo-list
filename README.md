@@ -3,9 +3,8 @@
 
 Effortlessly manage tasks with our ReactJS + PHP To-Do List. Real-time updates, data persistence, and easy integration for a seamless task management experience.
 
-
-
-
+## Underdevelopment
+Please note that this project is currently under development, and certain features or functionalities may not be fully developed. We are actively working on improving and enhancing the application.
 
 ## Installation
 
