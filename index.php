@@ -45,13 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($data->action)) {
             break;
 
         case 'validateJWT':
-
             $jwt_obj = new JwtUtils();
-
             $jwt_obj->jwt = $data->jwt;
-
             $jwt_obj->validate();
-
             break;
 
         case 'create':
@@ -95,6 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($data->action)) {
             break;
     }
 } else {
-    http_response_code(405); // Method Not Allowed
-    echo json_encode(['error' => 'Method not allowed']);
+    http_response_code(405);
+    echo json_encode(['error' => 'Oops! It seems like you are using an unsupported HTTP method. Please use a valid method for this request.']);
 }

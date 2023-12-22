@@ -16,15 +16,20 @@ class JwtUtils
     public function validate(): bool
     {
 
+
         $jwt = $this->jwt ?? "";
 
         if ($jwt){
             try {
-                $key = JWT_CONFIG['KEY'];
-
-
+                $key = JWT_CONFIG['PUBLIC_KEY'];
                 $headers = new stdClass();
-                $decoded = JWT::decode($this->jwt, new Key($key, 'HS256'), $headers);
+
+
+                $decoded = JWT::decode(
+                    $this->jwt,
+                    new Key($key, 'RS256'),
+                    $headers
+                );
 
                 // set response code
                 http_response_code(200);
@@ -50,10 +55,31 @@ class JwtUtils
                     "message" => "Access denied.",
                     "error" => $exception->getMessage()
                 ));
+
                 return false;
             }
         }
         return false;
     }
+
+    public function generateJwtToken(array $user): string
+    {
+        $token = [
+            "iss" => JWT_CONFIG['ISS'],
+            "aud" => JWT_CONFIG['AUD'],
+            "iat" => JWT_CONFIG['IAT'],
+            "nbf" => JWT_CONFIG['NBF'],
+            "data" => [
+                "id" => $user['user_id'],
+                "username" => $user['username'],
+                "email" => $user['email']
+            ]
+        ];
+
+        $key = JWT_CONFIG['PRIVATE_KEY'];
+        $algo = JWT_CONFIG['ALGO'];
+        return JWT::encode($token, $key, $algo);
+    }
+
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 use Firebase\JWT\JWT;
-class Authentication
+ class Authentication
 {
 
     /**
@@ -126,21 +126,11 @@ class Authentication
                 // Verify the password
                 if (password_verify($this->password, $row['password'])) {
                     // Generate JWT token
-                    $token = [
-                        "iss" => JWT_CONFIG['ISS'],
-                        "aud" => JWT_CONFIG['AUD'],
-                        "iat" => JWT_CONFIG['IAT'],
-                        "nbf" => JWT_CONFIG['NBF'],
-                        "data" => [
-                            "id" => $row['user_id'],
-                            "username" => $row['username'],
-                            "email" => $row['email']
-                        ]
-                    ];
 
-                    $key = JWT_CONFIG['KEY'];
-                    $algo = JWT_CONFIG['ALGO'];
-                    $jwt = JWT::encode($token, $key, $algo);
+                    $jwtUtil = new JwtUtils();
+
+                    $jwt = $jwtUtil->generateJwtToken($row);
+
 
                     // Return success response
                     http_response_code(200);
