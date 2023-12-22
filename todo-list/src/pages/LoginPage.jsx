@@ -3,6 +3,7 @@ import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 import { setCookie } from "../utils/cookie.js";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../config.js";
 
 function LoginPage({ setLoggedIn }) {
 
@@ -28,7 +29,7 @@ function LoginPage({ setLoggedIn }) {
         };
 
         try {
-            const response = await fetch('http://localhost/php-api/api.php', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 body: JSON.stringify(data)
             });

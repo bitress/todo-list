@@ -28,7 +28,7 @@ function HomePage() {
                 if (decoded.exp && decoded.exp < Date.now() / 1000) {
                     console.log('JWT has expired');
                     // Redirect to the login page when the token has expired
-                    navigate('/login');
+                    window.location.href = '/login'
                     return;
                 }
 
