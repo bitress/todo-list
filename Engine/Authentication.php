@@ -98,19 +98,6 @@ use Firebase\JWT\JWT;
                 return false;
             }
 
-            // Check if the username exists
-            if (!$this->isUsernameExists()) {
-                http_response_code(400);
-                echo json_encode(["success" => false, "message" => "Can't find the account with that username."]);
-                return false;
-            }
-
-            // Check if the email exists
-            if (!$this->isEmailExists()) {
-                http_response_code(400);
-                echo json_encode(["success" => false, "message" => "Can't find the account with that email."]);
-                return false;
-            }
 
             // Prepare and execute the SQL query
             $sql = "SELECT * FROM " . $this->table_name . " WHERE username = :username OR email = :email";
