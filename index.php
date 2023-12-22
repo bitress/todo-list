@@ -16,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($data->action)) {
         case 'create_account':
             $auth = new Authentication();
 
-            // Check if the required properties exist in the JSON data
             if (isset($data->username, $data->email, $data->password)) {
                 $auth->username = $data->username;
                 $auth->email = $data->email;
@@ -27,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($data->action)) {
                     echo json_encode(["success" => true, 'message' => 'Account created successfully']);
                 }
             } else {
-                http_response_code(400); // Bad Request
+                http_response_code(400);
                 echo json_encode(["success" => false, 'message' => 'Invalid data. Username, email, and password are required']);
             }
             break;
