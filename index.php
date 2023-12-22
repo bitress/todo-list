@@ -33,12 +33,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($data->action)) {
 
 
         case 'login':
-            // TODO: Add code to handle login
-            // Example: $username = $_POST['username']; $password = $_POST['password'];
-            // TODO: Verify login credentials against the database
 
-            // Respond with a success message or appropriate response
-            echo json_encode(['message' => 'Login successful']);
+            $auth = new Authentication();
+
+                $auth->username = $data->username;
+                $auth->email = $data->email;
+                $auth->password = $data->password;
+
+                $auth->userLogin();
+
+            break;
+
+        case 'validateJWT':
+
+            $jwt_obj = new JwtUtils();
+
+            $jwt_obj->jwt = $data->jwt;
+
+            $jwt_obj->validate();
+
             break;
 
         case 'create':

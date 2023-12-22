@@ -1,5 +1,6 @@
 <?php
 
+use Firebase\JWT\JWT;
 class Authentication
 {
 
@@ -87,9 +88,81 @@ class Authentication
         return false;
     }
 
+    public function userLogin()
+    {
+        try {
+            // Check for empty fields
+            if (empty($this->username) || empty($this->email) || empty($this->password)) {
+                http_response_code(400);
+                echo json_encode(["success" => false, "message" => "Please provide username, email, and password."]);
+                return false;
+            }
+
+            // Check if the username exists
+            if (!$this->isUsernameExists()) {
+                http_response_code(400);
+                echo json_encode(["success" => false, "message" => "Can't find the account with that username."]);
+                return false;
+            }
+
+            // Check if the email exists
+            if (!$this->isEmailExists()) {
+                http_response_code(400);
+                echo json_encode(["success" => false, "message" => "Can't find the account with that email."]);
+                return false;
+            }
+
+            // Prepare and execute the SQL query
+            $sql = "SELECT * FROM " . $this->table_name . " WHERE username = :username OR email = :email";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":username", $this->username);
+            $stmt->bindParam(":email", $this->email);
+            $stmt->execute();
+
+            // Check if there is a matching user
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                // Verify the password
+                if (password_verify($this->password, $row['password'])) {
+                    // Generate JWT token
+                    $token = [
+                        "iss" => JWT_CONFIG['ISS'],
+                        "aud" => JWT_CONFIG['AUD'],
+                        "iat" => JWT_CONFIG['IAT'],
+                        "nbf" => JWT_CONFIG['NBF'],
+                        "data" => [
+                            "id" => $row['user_id'],
+                            "username" => $row['username'],
+                            "email" => $row['email']
+                        ]
+                    ];
+
+                    $key = JWT_CONFIG['KEY'];
+                    $algo = JWT_CONFIG['ALGO'];
+                    $jwt = JWT::encode($token, $key, $algo);
+
+                    // Return success response
+                    http_response_code(200);
+                    echo json_encode(["success" => true, "message" => "Successful login.", "jwt" => $jwt]);
+                    return true;
+                }
+            }
+
+            // Return failure response
+            http_response_code(401);
+            echo json_encode(["success" => false, "message" => "Login failed."]);
+            return false;
+        } catch (Exception $exception) {
+            // Handle exceptions
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error: " . $exception->getMessage()]);
+        }
+    }
 
 
-    private function isEmailExists()
+
+    private function isEmailExists(): bool
     {
         $sql = "SELECT email FROM " . $this->table_name . " WHERE email = :email";
         $stmt = $this->db->prepare($sql);
