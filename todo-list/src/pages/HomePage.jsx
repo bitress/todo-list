@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {jwtDecode} from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
-import { getCookie, deleteCookie } from '../utils/cookie.js';
+import { getCookie } from '../utils/cookie.js';
+import TodoList from "../components/Todo/TodoList.jsx";
 
 function HomePage() {
     const [decodedData, setDecodedData] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const decodeJWTFromCookie = () => {
@@ -41,26 +40,29 @@ function HomePage() {
         decodeJWTFromCookie();
     }, []);
 
-    const handleLogout = () => {
-        // Clear the JWT token from the cookie
-        const deleted = deleteCookie('jwt');
 
-        if (deleted) {
-            // Navigate to the login page
-            navigate('/login');
-        } else {
-            console.error('Failed to delete JWT cookie');
-        }
-    };
+
 
     return (
         <>
-            {decodedData && (
-                <div className="mt-4 p-5 bg-secondary text-white rounded">
-                    <h3>Hello, {decodedData.data.username}</h3>
-                    <button onClick={handleLogout}>Logout</button>
+
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-12">
+                        {decodedData && (
+                            <div className="mt-4 p-5 bg-secondary text-white rounded">
+                                <h3>Hello, {decodedData.data.username}</h3>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="col-md-12">
+                        <TodoList></TodoList>
+                    </div>
                 </div>
-            )}
+            </div>
+
+
         </>
     );
 }

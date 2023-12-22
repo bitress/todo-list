@@ -91,7 +91,7 @@ function RegisterPage() {
                             <div className="card-footer py-3 border-0">
                                 <div className="text-center">
                                     Already have an account?{' '}
-                                    <a href="index.html" className="text-dark">
+                                    <a href="/login" className="text-dark">
                                         Login
                                     </a>
                                 </div>
